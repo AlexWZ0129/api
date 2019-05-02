@@ -115,7 +115,7 @@ export class DoubleMapType extends Struct {
       key1: Type,
       key2: Type,
       value: Type,
-      key2Hasher: StorageHasher
+      key2Hasher: Text
     }, value);
   }
 
@@ -141,10 +141,10 @@ export class DoubleMapType extends Struct {
   }
 
   /**
-   * @description The hashing algorithm used to hash key2, as [[StorageHasher]]
+   * @description The hashing algorithm used to hash key2, as [[Text]]
    */
-  get key2Hasher (): StorageHasher {
-    return this.get('key2Hasher') as StorageHasher;
+  get key2Hasher (): Text {
+    return this.get('key2Hasher') as Text;
   }
 
   /**
