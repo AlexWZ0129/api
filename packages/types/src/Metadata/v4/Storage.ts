@@ -112,46 +112,46 @@ export class DoubleMapType extends Struct {
   constructor (value?: any) {
     super({
       hasher: StorageHasher,
-      key1: Text,
-      key2: Text,
-      value: Text,
-      key2Hasher: Text
+      key1: Type,
+      key2: Type,
+      value: Type,
+      key2Hasher: StorageHasher
     }, value);
   }
 
   /**
-   * @description The hashing algorithm used to hash keys, as [[Text]]
+   * @description The hashing algorithm used to hash keys, as [[StorageHasher]]
    */
-  get hasher (): Text {
-    return this.get('hasher') as Text;
+  get hasher (): StorageHasher {
+    return this.get('hasher') as StorageHasher;
   }
 
   /**
-   * @description The mapped key as [[Text]]
+   * @description The mapped key as [[Type]]
    */
-  get key1 (): Text {
-    return this.get('key1') as Text;
+  get key1 (): Type {
+    return this.get('key1') as Type;
   }
 
   /**
-   * @description The mapped key as [[Text]]
+   * @description The mapped key as [[Type]]
    */
-  get key2 (): Text {
-    return this.get('key2') as Text;
+  get key2 (): Type {
+    return this.get('key2') as Type;
   }
 
   /**
-   * @description The hashing algorithm used to hash key2, as [[Text]]
+   * @description The hashing algorithm used to hash key2, as [[StorageHasher]]
    */
-  get key2Hasher (): Text {
-    return this.get('key2Hasher') as Text;
+  get key2Hasher (): StorageHasher {
+    return this.get('key2Hasher') as StorageHasher;
   }
 
   /**
-   * @description The mapped key as [[Text]]
+   * @description The mapped key as [[Type]]
    */
-  get value (): Text {
-    return this.get('value') as Text;
+  get value (): Type {
+    return this.get('value') as Type;
   }
 }
 
