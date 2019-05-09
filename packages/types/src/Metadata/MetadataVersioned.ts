@@ -139,7 +139,7 @@ export default class MetadataVersioned extends Struct implements MetadataInterfa
     assert([2, 3, 4].includes(this.metadata.version), `Cannot convert metadata from v${this.metadata.version} to v1`);
 
     if (isUndefined(this._convertedV1)) {
-      this._convertedV1 = v2ToV1(this.metadata.asV2);
+      this._convertedV1 = v2ToV1(this.asV2);
     }
 
     return this._convertedV1;
@@ -156,7 +156,7 @@ export default class MetadataVersioned extends Struct implements MetadataInterfa
     assert([3, 4].includes(this.metadata.version), `Cannot convert metadata from v${this.metadata.version} to v2`);
 
     if (isUndefined(this._convertedV2)) {
-      this._convertedV2 = v3ToV2(this.metadata.asV3);
+      this._convertedV2 = v3ToV2(this.asV3);
     }
 
     return this._convertedV2;
@@ -184,7 +184,7 @@ export default class MetadataVersioned extends Struct implements MetadataInterfa
   }
 
   /**
-   * @description Returns the wrapped values as a V3 object
+   * @description Returns the wrapped values as a V4 object
    */
   get asV4 (): MetadataV4 {
     assert(this.metadata.version === 4, `Cannot convert metadata from v${this.metadata.version} to v4`);

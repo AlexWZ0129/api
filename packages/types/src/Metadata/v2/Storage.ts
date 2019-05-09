@@ -12,7 +12,6 @@ import Bytes from '../../primitive/Bytes';
 import Text from '../../primitive/Text';
 import Type from '../../primitive/Type';
 import { PlainType, StorageFunctionModifier } from '../v1/Storage';
-import { DoubleMapType } from '../v4/Storage';
 
 // Re-export classes that haven't changed between V1 and V2
 export {
@@ -51,20 +50,12 @@ export class MapType extends Struct {
   }
 }
 
-export class StorageFunctionType extends EnumType<PlainType | MapType | DoubleMapType> {
+export class StorageFunctionType extends EnumType<PlainType | MapType> {
   constructor (value?: any, index?: number) {
     super({
       PlainType,
-      MapType,
-      DoubleMapType
+      MapType
     }, value, index);
-  }
-
-  /**
-   * @description `true` if the storage entry is a doublemap
-   */
-  get isDoubleMap (): boolean {
-    return this.toNumber() === 2;
   }
 
   /**
@@ -72,13 +63,6 @@ export class StorageFunctionType extends EnumType<PlainType | MapType | DoubleMa
    */
   get isMap (): boolean {
     return this.toNumber() === 1;
-  }
-
-  /**
-   * @description The value as a mapped value
-   */
-  get asDoubleMap (): DoubleMapType {
-    return this.value as DoubleMapType;
   }
 
   /**
@@ -99,10 +83,6 @@ export class StorageFunctionType extends EnumType<PlainType | MapType | DoubleMa
    * @description Returns the string representation of the value
    */
   toString (): string {
-    if (this.isDoubleMap) {
-      return this.asDoubleMap.value.toString();
-    }
-
     return this.isMap
       ? this.asMap.value.toString()
       : this.asType.toString();

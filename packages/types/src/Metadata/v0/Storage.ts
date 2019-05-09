@@ -11,7 +11,6 @@ import Vector from '../../codec/Vector';
 import Bytes from '../../primitive/Bytes';
 import Text from '../../primitive/Text';
 import Type from '../../primitive/Type';
-import { DoubleMapType } from '../v4/Storage';
 
 export class StorageFunctionModifier extends Enum {
   constructor (value?: any) {
@@ -70,20 +69,12 @@ export class MapType extends Struct {
 export class PlainType extends Type {
 }
 
-export class StorageFunctionType extends EnumType<PlainType | MapType | DoubleMapType> {
+export class StorageFunctionType extends EnumType<PlainType | MapType> {
   constructor (value?: any, index?: number) {
     super({
       PlainType,
-      MapType,
-      DoubleMapType
+      MapType
     }, value, index);
-  }
-
-  /**
-   * @description `true` if the storage entry is a doublemap
-   */
-  get isDoubleMap (): boolean {
-    return this.toNumber() === 2;
   }
 
   /**
@@ -91,13 +82,6 @@ export class StorageFunctionType extends EnumType<PlainType | MapType | DoubleMa
    */
   get isMap (): boolean {
     return this.toNumber() === 1;
-  }
-
-  /**
-   * @description The value as a double mapped value
-   */
-  get asDoubleMap (): DoubleMapType {
-    return this.value as DoubleMapType;
   }
 
   /**
@@ -118,9 +102,6 @@ export class StorageFunctionType extends EnumType<PlainType | MapType | DoubleMa
    * @description Returns the string representation of the value
    */
   toString (): string {
-    if (this.isDoubleMap) {
-      return this.asDoubleMap.value.toString();
-    }
 
     if (this.isMap) {
       if (this.asMap.isLinked) {

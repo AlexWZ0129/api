@@ -8,8 +8,8 @@ import MetadataV0 from '@polkadot/types/Metadata/v0';
 
 import { stringCamelCase } from '@polkadot/util';
 
-import createUnchecked from './utils/createUnchecked';
-import extrinsics from '.';
+import createUnchecked from './createUnchecked';
+import extrinsics from '../..';
 
 /**
  * Extend a storage object with the storage modules & module functions present
@@ -18,7 +18,7 @@ import extrinsics from '.';
  * @param extrinsics - An extrinsics object to be extended.
  * @param metadata - The metadata to extend the storage object against.
  */
-export default function fromMetadata (metadata: MetadataV0): ModulesWithMethods {
+export default function fromV0 (metadata: MetadataV0): ModulesWithMethods {
   let indexCount = -1;
 
   const findIndex = (prefix: string): number => {

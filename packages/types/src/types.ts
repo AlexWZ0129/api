@@ -8,6 +8,7 @@ import U8a from './codec/U8a';
 import Method from './primitive/Method';
 import Address from './type/Address';
 import { FunctionMetadata } from './Metadata/v0/Modules';
+import { MetadataCall } from './Metadata/v1/Calls';
 
 export type CodecArg = Codec | BN | Boolean | String | Uint8Array | boolean | number | string | undefined | CodecArgArray | CodecArgObject;
 
@@ -112,7 +113,7 @@ export interface IMethod extends Codec {
   readonly callIndex: Uint8Array;
   readonly data: Uint8Array;
   readonly hasOrigin: boolean;
-  readonly meta: FunctionMetadata;
+  readonly meta: FunctionMetadata | MetadataCall;
 }
 
 export interface IExtrinsicSignature extends Codec {
