@@ -5,9 +5,10 @@
 import { createType, Bytes, Compact, StorageKey, Text, U8a } from '@polkadot/types';
 import { PlainType, StorageFunctionMetadata, StorageFunctionModifier, StorageFunctionType } from '@polkadot/types/Metadata/v4/Storage';
 import { StorageFunction } from '@polkadot/types/primitive/StorageKey';
-import { assert, isNull, isUndefined, stringLowerFirst, stringToU8a, u8aConcat } from '@polkadot/util';
+import { assert, isNull, isUndefined, stringLowerFirst, stringToU8a, u8aConcat, u8aToHex, hexToU8a } from '@polkadot/util';
 
-import getHasher from './getHasher';
+import getHasher, { getHasherName, HasherFunction } from './getHasher';
+import { StorageHasher } from '@polkadot/types/primitive';
 
 export interface CreateItemOptions {
   key?: string;
@@ -32,8 +33,17 @@ export default function createFunction (section: Text | string, method: Text | s
 
   // Get the hashing function
   // FIXME Hash correctly for double map too
-  const hasher = meta.type.isMap
-    ? getHasher(meta.type.asMap.hasher)
+  let hasher: HasherFunction;
+  if (meta.type.isDoubleMap) {
+    hasher = getHasher(meta.type.asDoubleMap.hasher);
+  } else {
+    hasher = meta.type.isMap
+      ? getHasher(meta.type.asMap.hasher)
+      : getHasher();
+  }
+
+  const key2Hasher = meta.type.isDoubleMap
+    ? getHasher(new StorageHasher(getHasherName(meta.type.asDoubleMap.key2Hasher).toString()))
     : getHasher();
 
   // Can only have zero or one argument:
@@ -41,6 +51,23 @@ export default function createFunction (section: Text | string, method: Text | s
   // - storage.timestamp.blockPeriod()
   const storageFn = (arg?: any): Uint8Array => {
     let key = rawKey;
+    if (meta.type.isDoubleMap) {
+      assert(!isUndefined(arg) && !isNull(arg) && !isUndefined(arg[0]) && !isNull(arg[0]) && !isUndefined(arg[1]) && !isNull(arg[1]), `${meta.name} expects two arguments`);
+      const type1 = meta.type.asDoubleMap.key1.toString();
+      const param1 = createType(type1, arg[0]).toU8a(true);
+      const type2 = meta.type.asDoubleMap.key2.toString();
+      const param2 = createType(type2, arg[1]).toU8a(true);
+
+      const param1Encoded = new Uint8Array(key.length + param1.length);
+      param1Encoded.set(key);
+      param1Encoded.set(param1, key.length);
+
+      const param1Hashed = hasher(param1Encoded);
+      const param2Hashed = key2Hasher(param2);
+
+      return u8aConcat(param1Hashed, param2Hashed);
+    }
+
     if (meta.type.isMap) {
       assert(!isUndefined(arg) && !isNull(arg), `${meta.name} expects one argument`);
 

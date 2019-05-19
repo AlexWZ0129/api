@@ -7,6 +7,8 @@ import { AnyU8a } from '../types';
 import { assert, isFunction, isString, isU8a } from '@polkadot/util';
 
 import Bytes from './Bytes';
+
+import U8a from '../codec/U8a';
 import { StorageFunctionMetadata as MetaV4 } from '../Metadata/v4/Storage';
 
 export interface StorageFunction {
@@ -69,7 +71,15 @@ export default class StorageKey extends Bytes {
       const [fn, ...arg]: [StorageFunction, ...Array<any>] = value as any;
 
       assert(isFunction(fn), 'Expected function input for key construction');
-
+      if (Array.isArray(arg[0])) {
+        const key = fn(...arg);
+        const u8a = new U8a(key);
+        return {
+          key: u8a,
+          method: fn.method,
+          section: fn.section
+        };
+      }
       return {
         key: fn(...arg),
         method: fn.method,

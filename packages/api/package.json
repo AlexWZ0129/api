@@ -36,6 +36,8 @@
     "@polkadot/rpc-rx": "^0.79.0-beta.31",
     "@polkadot/storage": "^0.79.0-beta.31",
     "@polkadot/types": "^0.79.0-beta.31",
-    "@polkadot/util-crypto": "^0.91.0-beta.1"
+    "@polkadot/util-crypto": "^0.91.0-beta.1",
+    "@cennznet/types": "^0.13.1",
+    "@cennznet/util": "^0.13.1"
   }
 }
